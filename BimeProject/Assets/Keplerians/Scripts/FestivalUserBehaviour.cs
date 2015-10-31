@@ -11,11 +11,14 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	public float speed;
 	public int currentPoint;
 
-	public enum FestivalUserState{FollowingPoints,FollowingDirection,Crashed};
+	public enum FestivalUserState{FollowingPoints,FollowingDirection,Crashed,Finished};
 	public FestivalUserState mState;
 
-	public enum SelectionState{Pressed,Dragging,Released,Cancelled};
+	public enum SelectionState{Pressed,Dragging,Released,Cancelled,Completed};
 	public SelectionState selectionState;
+
+	public enum UserControlState{Stopped,Continue};
+	public UserControlState controlState;
 
 	public Vector3 currentDirection;
 
@@ -30,6 +33,7 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	public SkeletonAnimation mSkeletonAnimation;
 
 	public GameObject nameLabel_prefab;
+	public GameObject message_prefab;
 	public UILabel nameLabel;
 
 	// Use this for initialization
@@ -49,9 +53,13 @@ public class FestivalUserBehaviour : MonoBehaviour {
 		nameLabel = (Instantiate (nameLabel_prefab) as GameObject).GetComponent<UILabel> ();
 		nameLabel.GetComponent<FollowPlayer> ().target = transform;
 		nameLabel.text = _Data.name;
+
+		controlState = UserControlState.Continue;
 	}
 
 	public void OnRemove(){
+		if (msg != null)
+			Destroy (msg);
 		Destroy (nameLabel.gameObject);
 		Destroy (gameObject);
 	}
@@ -59,46 +67,57 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	public IEnumerator FollowBehaviour(){
 
 		while (true) {
-			if(mState == FestivalUserState.FollowingPoints){
-				Vector3 targetPoint = followPoints[currentPoint];
-				currentDirection =  (followPoints[currentPoint] - (Vector2)transform.position).normalized;
-				transform.up = currentDirection;
-				transform.position += currentDirection * Time.deltaTime * speed;
+			if(controlState == UserControlState.Continue){
+				if(mState == FestivalUserState.FollowingPoints){
+					Vector3 targetPoint = followPoints[currentPoint];
+					currentDirection =  (followPoints[currentPoint] - (Vector2)transform.position).normalized;
+					transform.up = currentDirection;
+					transform.position += currentDirection * Time.deltaTime * speed;
 
-				if(Vector2.Distance(transform.position,followPoints[currentPoint]) < changeFollowPointDistance){
-					Debug.Log("Ha alcanzado el siguiente waypoint");
+					if(Vector2.Distance(transform.position,followPoints[currentPoint]) < changeFollowPointDistance){
+						Debug.Log("Ha alcanzado el siguiente waypoint");
 
-					if(currentPoint < followPoints.Count-1){
-						Debug.Log("Pasar al siguiente waypoint");
-						//Next point
-						currentPoint++;
-					}
-					else{
-						Debug.Log("Ha llegado al final del camino, continuar con la misma direccion... current point is " + currentPoint.ToString());
-						mState = FestivalUserState.FollowingDirection;
+						if(currentPoint < followPoints.Count-1){
+							Debug.Log("Pasar al siguiente waypoint");
+							//Next point
+							currentPoint++;
+						}
+						else{
+							if(selectionState == SelectionState.Completed){
+								Debug.Log("Ha finalizado");
+								mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.idle_anim, true);
+								//TODO El usuario se colocará en un sitio libre? Desconectar al usuario...
+								mState = FestivalUserState.Finished;
+								yield break;
+							}
+							Debug.Log("Ha llegado al final del camino, continuar con la misma direccion... current point is " + currentPoint.ToString());
+							mState = FestivalUserState.FollowingDirection;
 
-						followPoints.Clear();
-						VectorLine.Destroy(ref myLine);
-					}
-				}
-			}
-			else{
-				transform.position += currentDirection * Time.deltaTime * speed;
-				transform.up = currentDirection;
-
-				//Raycast para detectar cambios de direccion...IA básica
-				RaycastHit2D hit = Physics2D.Raycast(transform.position,currentDirection,3F,mCollisionLayer);
-
-				if(hit.collider != null){
-					if(hit.collider.tag == "no_walkable"){
-						Debug.Log("Wall detected");
-						currentDirection = Vector3.Reflect(currentDirection,hit.normal);
+							followPoints.Clear();
+							VectorLine.Destroy(ref myLine);
+						}
 					}
 				}
+				else{
+					transform.position += currentDirection * Time.deltaTime * speed;
+					transform.up = currentDirection;
+
+					//Raycast para detectar cambios de direccion...IA básica
+					RaycastHit2D hit = Physics2D.Raycast(transform.position,currentDirection,3F,mCollisionLayer);
+
+					if(hit.collider != null){
+						if(hit.collider.tag == "no_walkable"){
+							Debug.Log("Wall detected");
+							currentDirection = Vector3.Reflect(currentDirection,hit.normal);
+						}
+					}
+				}
+				UpdateLine();
 			}
-			UpdateLine();
+
 			yield return null;
-		
+
+			
 		}
 
 	}
@@ -106,15 +125,16 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	float minStartDragTime = 1.0F;
 
 	public void OnPress(bool pressed){
-		selectionState = SelectionState.Pressed;
+
 		Debug.Log("Pressed " + pressed.ToString());
 
 		if (!pressed){
-			if(selectionState != SelectionState.Cancelled){
+			if(selectionState != SelectionState.Cancelled && selectionState != SelectionState.Completed){
 				OnRelease ();	
 			}
 		} 
 		else {
+			selectionState = SelectionState.Pressed;
 			pressTime = Time.time;
 			newWayStarted = false;
 		}
@@ -122,7 +142,7 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	bool newWayStarted;
 
 	public void OnDrag(Vector2 delta){
-		if (selectionState == SelectionState.Cancelled)
+		if (selectionState == SelectionState.Cancelled || selectionState == SelectionState.Completed)
 			return;
 
 		if (selectionState == SelectionState.Pressed) {
@@ -152,6 +172,12 @@ public class FestivalUserBehaviour : MonoBehaviour {
 			if (hit.collider.tag == "no_walkable") {
 				Debug.Log("Way cancelled");
 				selectionState = SelectionState.Cancelled;
+				return;
+			}
+
+			if (hit.collider.tag == "targetZone") {
+				Debug.Log("target assigned");
+				selectionState = SelectionState.Completed;
 				return;
 			}
 		}
@@ -200,7 +226,7 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	}
 
 	public void OnRelease(){
-
+		selectionState = SelectionState.Released;
 		Debug.Log ("On Release");
 			
 	}
@@ -226,12 +252,29 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col){
 		if (col.tag == "Player" || col.tag == "Obstacle") {
 			if(mState != FestivalUserState.Crashed){
-				mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.crash_anim, true);
+				mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.crash_anim, false);
 				StopCoroutine("FollowBehaviour");
 				mState = FestivalUserState.Crashed;
 			}
 		}
 
+	}
+	public GameObject msg;
+
+	public void CreateChatMessage(string txt){
+		if (msg != null)
+			Destroy (msg);
+		msg = (Instantiate (message_prefab) as GameObject);
+		msg.GetComponent<FollowPlayer> ().target = transform;
+		msg.GetComponent<MessageScript> ().InitMessage (txt);
+	}
+
+	public void OnStop(){
+		controlState = UserControlState.Stopped;
+	}
+
+	public void OnContinue(){
+		controlState = UserControlState.Continue;
 	}
 
 

@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Keplerians/Scripts/FestivalUserBehaviour.cs">
     <Files>
-      <File FileName="Assets/Keplerians/Scripts/FestivalUserBehaviour.cs" Line="227" Column="50" />
+      <File FileName="Assets/Keplerians/Scripts/FestivalUserBehaviour.cs" Line="85" Column="12" />
       <File FileName="Assets/Keplerians/Scripts/AudioManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Keplerians/Scripts/UserController.cs" Line="1" Column="1" />
       <File FileName="Assets/Examples/Scripts/RaggedySpineboy.cs" Line="1" Column="1" />
@@ -11,8 +11,11 @@
       <File FileName="Assets/Keplerians(Pablo)/GameManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Keplerians(Pablo)/ConnectionManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Keplerians/Scripts/FollowPlayer.cs" Line="1" Column="1" />
-      <File FileName="Assets/HUDController.cs" Line="1" Column="1" />
       <File FileName="Assets/NGUI/Scripts/Internal/UIDrawCall.cs" Line="1" Column="1" />
+      <File FileName="Assets/Keplerians(Pablo)/ClientManager.cs" Line="54" Column="3" />
+      <File FileName="Assets/MessageScript.cs" Line="1" Column="1" />
+      <File FileName="Assets/Keplerians/Scripts/HUDController.cs" Line="1" Column="1" />
+      <File FileName="Assets/Keplerians(Pablo)/ChatManager.cs" Line="12" Column="48" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

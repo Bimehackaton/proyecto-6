@@ -55,7 +55,7 @@
      <Compile Include="Assets\Examples\Scripts\SpineGauge.cs" />
      <Compile Include="Assets\Examples\Scripts\Spineboy.cs" />
      <Compile Include="Assets\Examples\Scripts\SpineboyController.cs" />
-     <Compile Include="Assets\HUDController.cs" />
+     <Compile Include="Assets\Keplerians(Pablo)\ChatManager.cs" />
      <Compile Include="Assets\Keplerians(Pablo)\ClientManager.cs" />
      <Compile Include="Assets\Keplerians(Pablo)\ConnectionManager.cs" />
      <Compile Include="Assets\Keplerians(Pablo)\GameManager.cs" />
@@ -64,8 +64,11 @@
      <Compile Include="Assets\Keplerians\Scripts\EntranceInfo.cs" />
      <Compile Include="Assets\Keplerians\Scripts\FestivalUserBehaviour.cs" />
      <Compile Include="Assets\Keplerians\Scripts\FollowPlayer.cs" />
+     <Compile Include="Assets\Keplerians\Scripts\GameController.cs" />
+     <Compile Include="Assets\Keplerians\Scripts\HUDController.cs" />
      <Compile Include="Assets\Keplerians\Scripts\SceneLoader.cs" />
      <Compile Include="Assets\Keplerians\Scripts\UserController.cs" />
+     <Compile Include="Assets\MessageScript.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\UICursor.cs" />
@@ -236,6 +239,7 @@
      <Compile Include="Assets\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewRotationModel.cs" />
      <Compile Include="Assets\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewScaleControl.cs" />
      <Compile Include="Assets\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewScaleModel.cs" />
+     <Compile Include="Assets\TargetZone.cs" />
      <Compile Include="Assets\spine-csharp\Animation.cs" />
      <Compile Include="Assets\spine-csharp\AnimationState.cs" />
      <Compile Include="Assets\spine-csharp\AnimationStateData.cs" />
@@ -291,7 +295,7 @@
      <Compile Include="Assets\spine-unity\SpriteAttacher.cs" />
      <Compile Include="Assets\spine-unity\SpriteCollectionAttachmentLoader.cs" />
      <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
-     <None Include="Assets\NGUI\ReadMe - 3.9.2.txt" />
+     <None Include="Assets\NGUI\ReadMe - 3.9.4.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Masked 1.shader" />
      <None Include="Assets\Examples\Spine\Eyes\eyes.atlas.txt" />
      <None Include="Assets\spine-unity\Shaders\HiddenPass.shader" />

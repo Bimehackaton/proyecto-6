@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
 		Debug.Log ("OnJoinedRoom");
 		if (isDirector) {
 			NGUITools.SetActive (createButton, false);
+			GameController.instance.OnStartGame();
 		} 
 		else {
 			ClientManager.instance.HideInputPanel();
