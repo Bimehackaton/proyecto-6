@@ -15,7 +15,24 @@ public class GameController : MonoBehaviour {
 	}
 	
 	public void OnStartGame(){
+		ScoreManager.instance.OnStartGame ();
 		HUDController.instance.OnStartGame ();
 		gameState = GameState.PLAYING;
 	}
+
+	public void OnLostGame ()
+	{
+		gameState = GameState.LOST;
+		ScoreManager.instance.UpdateFinalScore ();
+		//TODO mostrar pantalla de perder
+		HUDController.instance.ShowLostWindow ();
+	}
+
+	public void OnFinishGame(){
+		ClientManager.instance.photonView.RPC("PlayerLost",PhotonTargets.Others);
+
+		PhotonNetwork.LeaveRoom ();
+
+	}
+
 }

@@ -12,12 +12,16 @@ public class AudioManager : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		instance = this;
-		DontDestroyOnLoad (gameObject);
 	}
 	
 	public void PlayClip(string clipName){
 		CustomAudioClip clip = clips.Find (c => c.clipName.Equals (clipName));
 		source.PlayOneShot (clip.clip);
+	}
+
+	public void PlayClip(AudioClip clip){
+		source.clip = clip;
+		source.Play ();
 	}
 }
 

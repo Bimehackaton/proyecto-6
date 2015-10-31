@@ -12,9 +12,21 @@ public class GameManager : MonoBehaviour {
 	public static GameManager instance;
 	public GameObject spawnPoint;
 	[SerializeField]public List<GameObject> clients;
+	public GameObject connectingLabel;
 
 	void Awake(){
 		instance = this;
+	}
+
+	void Start(){
+		if (PhotonNetwork.connected) {
+			if(!isDirector)
+				ClientManager.instance.ShowInputPanel();
+			else{
+				NGUITools.SetActive(connectingLabel,false);
+				NGUITools.SetActive (createButton, true);
+			}
+		}
 	}
 
 	void OnJoinedRoom()
@@ -48,22 +60,16 @@ public class GameManager : MonoBehaviour {
 		
 	}
 
-	
-	void OnGUI()
-	{
-		if (PhotonNetwork.room == null) return; //Only display this GUI when inside a room
-		
-		if (GUILayout.Button("Leave Room"))
-		{
-			PhotonNetwork.LeaveRoom();
-		}
-	}
-
 	void OnPhotonPlayerConnected(PhotonPlayer pp){
+
 		if (isDirector) {
-			Debug.Log("Crear jugador conectado:" + pp.name);
+
+			int type = (int)pp.customProperties["type"];
+			int door = (int)pp.customProperties["door"];
+
+			Debug.Log("Crear jugador conectado:" + pp.name + "door " + door.ToString());
 			GameObject go = Instantiate (playerPrefab);
-			UserController.instance.OnCreateNewUser(pp.name,go,(UserController.UserType)Random.Range(0,4));
+			UserController.instance.OnCreateNewUser(pp.name,go,(UserController.UserType)type,door);
 			go.GetComponent<PlayerClient>().photonPlayer = pp;
 			clients.Add(go);
 		}
@@ -97,6 +103,7 @@ public class GameManager : MonoBehaviour {
 	{
 		Debug.Log("OnConnectedToPhoton");
 		if (isDirector) {
+			NGUITools.SetActive(connectingLabel,false);
 			NGUITools.SetActive (createButton, true);
 
 		} else {

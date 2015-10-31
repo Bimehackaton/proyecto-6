@@ -13,6 +13,7 @@ public class UserController : MonoBehaviour {
 	public List<FestivalUserBehaviour> users;
 	public List<User> usersData;
 
+	public DetectCollision detector;
 
 	// Use this for initialization
 	void Awake () {
@@ -27,23 +28,24 @@ public class UserController : MonoBehaviour {
 		VectorLine.canvas.renderMode = RenderMode.WorldSpace;
 	}
 
-	public void CreateNewUser(string mName,UserType type){
+	public void CreateNewUser(string mName,UserType type,int door){
 		GameObject newUser = Instantiate (userPrefab) as GameObject;
-		newUser.transform.position = entrances [0].transform.position;
+		newUser.transform.position = entrances [door].transform.position;
 		FestivalUser userInfo = new FestivalUser ();
 		userInfo.ID = users.Count;
 		userInfo.name = mName;
 		userInfo.animInfo = usersData.Find (ud => ud.userType == type);
-		newUser.GetComponent<FestivalUserBehaviour> ().Init (entrances [0], userInfo);
+		newUser.GetComponent<FestivalUserBehaviour> ().Init (entrances [door], userInfo);
 	}
 
-	public void OnCreateNewUser(string mName,GameObject newUser,UserType type){
-		newUser.transform.position = entrances [0].transform.position;
+	public void OnCreateNewUser(string mName,GameObject newUser,UserType type,int door){
+		newUser.transform.position = entrances [door].transform.position;
 		FestivalUser userInfo = new FestivalUser ();
+		userInfo.userType = type;
 		userInfo.ID = users.Count;
 		userInfo.name = mName;
 		userInfo.animInfo = usersData.Find (ud => ud.userType == type);
-		newUser.GetComponent<FestivalUserBehaviour> ().Init (entrances [0], userInfo);
+		newUser.GetComponent<FestivalUserBehaviour> ().Init (entrances [door], userInfo);
 	}
 
 	public void OnUserFinish(){
@@ -55,11 +57,23 @@ public class UserController : MonoBehaviour {
 		string[] names = new string[]{"alex","ion","pablo","pepe"};
 
 		while (true) {
-			CreateNewUser(names[index],(UserType)Random.Range(0,4));
+			CreateNewUser(names[index],(UserType)Random.Range(0,4),0);
 			index++;
 			yield return new WaitForSeconds(25.0F);
 		}
 
+	}
+	public bool detectorEnabled = false;
+	public void SetPosition(Vector3 worldPos){
+		detector.transform.position = worldPos;
+	}
+	public void EnableDetector(){
+		detectorEnabled = true;
+		detector.EnableDetector ();
+	}
+	public void DisableDetector(){
+		detectorEnabled = false;
+		detector.DisableDetector ();
 	}
 
 }

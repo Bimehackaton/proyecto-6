@@ -26,6 +26,10 @@ public class ConnectionManager : MonoBehaviour {
 			}
 			else{
 				PhotonNetwork.playerName = ClientManager.instance.inputName.label.text;
+				ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+				props.Add("type", (int)ClientManager.instance.currentUType);
+				props.Add("door", (int)ClientManager.instance.currentDoor);
+				PhotonNetwork.player.SetCustomProperties(props);
 				PhotonNetwork.JoinRandomRoom();
 			}
 

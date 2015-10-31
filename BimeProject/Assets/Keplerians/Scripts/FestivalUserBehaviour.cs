@@ -61,7 +61,11 @@ public class FestivalUserBehaviour : MonoBehaviour {
 		if (msg != null)
 			Destroy (msg);
 		Destroy (nameLabel.gameObject);
-		Destroy (gameObject);
+		if(myLine!=null){
+			//followPoints.Clear();
+			VectorLine.Destroy(ref myLine);
+		}
+		if(mState != FestivalUserState.Finished)Destroy (gameObject);
 	}
 	
 	public IEnumerator FollowBehaviour(){
@@ -69,6 +73,7 @@ public class FestivalUserBehaviour : MonoBehaviour {
 		while (true) {
 			if(controlState == UserControlState.Continue){
 				if(mState == FestivalUserState.FollowingPoints){
+					//Debug.Log("current point is " + currentPoint.ToString() + "/" + followPoints.Count.ToString());
 					Vector3 targetPoint = followPoints[currentPoint];
 					currentDirection =  (followPoints[currentPoint] - (Vector2)transform.position).normalized;
 					transform.up = currentDirection;
@@ -85,30 +90,28 @@ public class FestivalUserBehaviour : MonoBehaviour {
 						else{
 							if(selectionState == SelectionState.Completed){
 								Debug.Log("Ha finalizado");
-								mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.idle_anim, true);
+
 								//TODO El usuario se colocará en un sitio libre? Desconectar al usuario...
 								mState = FestivalUserState.Finished;
-
+								ClientManager.instance.photonView.RPC("WayCompleted",GetComponent<PlayerClient>().photonPlayer);
 								ScoreManager.instance.OnUserFinished();
+								StartCoroutine("GoRoomSlot");
 								yield break;
 							}
 							else if(selectionState == SelectionState.WrongCompleted){
 								Debug.Log("Ha finalizado incorrectamente");
-								mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.crash_anim, true);
+								mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.crash_anim, false);
 								//TODO El usuario se colocará en un sitio libre? Desconectar al usuario...
 								mState = FestivalUserState.Finished;
-								
+								ClientManager.instance.photonView.RPC("PlayerLost",GetComponent<PlayerClient>().photonPlayer);
+
 								ScoreManager.instance.OnUserFinishedWrong();
+								GameController.instance.OnLostGame();
 								yield break;
 							}
+
 							Debug.Log("Ha llegado al final del camino, continuar con la misma direccion... current point is " + currentPoint.ToString());
 							mState = FestivalUserState.FollowingDirection;
-
-							followPoints.Clear();
-
-							if(myLine != null){
-								VectorLine.Destroy(ref myLine);
-							}
 						}
 					}
 				}
@@ -117,18 +120,18 @@ public class FestivalUserBehaviour : MonoBehaviour {
 					transform.up = currentDirection;
 
 					//Raycast para detectar cambios de direccion...IA básica
-					RaycastHit2D hit = Physics2D.Raycast(transform.position,currentDirection,3F,mCollisionLayer);
+					RaycastHit2D hit = Physics2D.Raycast(transform.position,currentDirection,7.5F,mCollisionLayer);
 
 					if(hit.collider != null){
 						if(hit.collider.tag == "no_walkable"){
-							Debug.Log("Wall detected");
+							//Debug.Log("Wall detected");
 							currentDirection = Vector3.Reflect(currentDirection,hit.normal);
 						}
 					}
 				}
-				UpdateLine();
-			}
 
+			}
+			UpdateLine();
 			yield return null;
 
 			
@@ -136,12 +139,33 @@ public class FestivalUserBehaviour : MonoBehaviour {
 
 	}
 
+	public IEnumerator GoRoomSlot(){
+	
+		float timer = 0, lerpTime = 1.0F;
+		Vector3 startPos = transform.position;
+		Vector3 finishPos = RoomSpaceController.instance.FindPosition (_Data.userType);
+		Vector3 direction = (finishPos - startPos).normalized;
+
+		transform.up = direction;
+
+		while (timer/lerpTime < 1) {
+			timer+=Time.deltaTime;
+			transform.position = Vector3.Lerp(startPos,finishPos,timer/lerpTime);
+			yield return null;
+		}
+
+		mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.idle_anim, true);
+		//TODO Miran hacia el musico
+	}
+
 	public void OnPress(bool pressed){
 
 		Debug.Log("Pressed " + pressed.ToString());
 
 		if (!pressed){
-			if(selectionState != SelectionState.Cancelled && selectionState != SelectionState.Completed){
+			if(selectionState != SelectionState.Cancelled &&
+			   			selectionState != SelectionState.Completed &&
+			   					selectionState != SelectionState.WrongCompleted){
 				OnRelease ();	
 			}
 		} 
@@ -153,34 +177,92 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	bool newWayStarted;
 
 	public void OnDrag(Vector2 delta){
-		if (selectionState == SelectionState.Cancelled || selectionState == SelectionState.Completed)
+		if (selectionState == SelectionState.Cancelled || selectionState == SelectionState.Completed || selectionState == SelectionState.WrongCompleted)
 			return;
 
 		if (selectionState == SelectionState.Pressed) {
 			selectionState = SelectionState.Dragging;
 
 			if(myLine!=null){
-				followPoints.Clear();
+				//followPoints.Clear();
 				VectorLine.Destroy(ref myLine);
 			}
 		}
 
 		Vector3 worldPoint = UICamera.lastWorldPosition;
 		worldPoint.z = transform.position.z;
-		Vector2 nextPoint = Vector2.zero;
+		Vector2 previousPoint = Vector2.zero;
 
 		if (!newWayStarted || (newWayStarted && mState == FestivalUserState.FollowingDirection)) {
-			nextPoint = transform.position;
+			previousPoint = transform.position;
 		} 
 		else if (newWayStarted && mState == FestivalUserState.FollowingPoints) {
-			nextPoint = followPoints [followPoints.Count - 1];
+			previousPoint = followPoints [followPoints.Count - 1];
 		} 
 
+		if (UserController.instance.detectorEnabled) {
+			UserController.instance.SetPosition(worldPoint);
+		}
+		
 
-		if (Vector2.Distance ((Vector2)worldPoint, nextPoint) > minWaypointDistance) {
+		if (Vector2.Distance ((Vector2)worldPoint, previousPoint) > minWaypointDistance) {
+
+			//Check collisions first...
+
+//			RaycastHit2D hit = Physics2D.Raycast (previousPoint,
+//			                                      ((Vector2)worldPoint - previousPoint).normalized, 30.0F);
+//			
+//			Debug.DrawLine(previousPoint,previousPoint + (((Vector2)worldPoint - previousPoint).normalized * 30.0F),Color.red);
+//			
+//			if(hit.collider != null){
+//				if (hit.collider.tag == "no_walkable") {
+//					Debug.Log("Way cancelled");
+//					selectionState = SelectionState.Cancelled;
+//					
+//					return;
+//				}
+//				
+//				if (hit.collider.tag == "targetZone") {
+//					
+//					Debug.Log("target assigned");
+//					
+//					if(hit.collider.gameObject.GetComponent<TargetZone>().type == _Data.userType){
+//						selectionState = SelectionState.Completed;
+//					}
+//					else{
+//						selectionState = SelectionState.WrongCompleted;
+//					}
+//					
+//					return;
+//				}
+//			}
+
+			if(UserController.instance.detector.collisionType == DetectCollision.CollisionType.Wall){
+				selectionState = SelectionState.Cancelled;
+				UserController.instance.DisableDetector();
+
+				return;
+			}
+			else if(UserController.instance.detector.collisionType == DetectCollision.CollisionType.Target){
+				if(UserController.instance.detector.lastObject == null){
+					Debug.LogWarning("Error: Se ha detectado un target pero no hay objeto vinculado...");
+				}
+				if(UserController.instance.detector.lastObject.GetComponent<TargetZone>().type == _Data.userType){
+					selectionState = SelectionState.Completed;
+				}
+				else selectionState = SelectionState.WrongCompleted;
+
+				UserController.instance.DisableDetector();
+				
+				return;
+			}
+
 			bool initLine = false;
 
 			if(!newWayStarted){
+				UserController.instance.EnableDetector();
+				UserController.instance.SetPosition(transform.position);
+				followPoints.Clear();
 				initLine = true;
 				newWayStarted = true;
 				currentPoint = 0;
@@ -189,18 +271,13 @@ public class FestivalUserBehaviour : MonoBehaviour {
 				if(mState == FestivalUserState.FollowingDirection){
 					mState = FestivalUserState.FollowingPoints;
 				}
-				else{
-
-				}
-
 			}
 
 			if(newWayStarted && mState == FestivalUserState.FollowingDirection){
-				if(followPoints.Count == 0){
-					mState = FestivalUserState.FollowingPoints;
-					followPoints.Add(transform.position);
-					currentPoint = 0;
-				}
+				followPoints.Clear();
+				mState = FestivalUserState.FollowingPoints;
+				followPoints.Add(transform.position);
+				currentPoint = 0;
 			}
 
 			//Add new point
@@ -213,31 +290,6 @@ public class FestivalUserBehaviour : MonoBehaviour {
 				InitLine();
 			}
 		}
-
-		if (newWayStarted && followPoints.Count > 0) {
-			RaycastHit2D hit = Physics2D.Raycast (followPoints [followPoints.Count - 1],
-			                                      (Vector2)worldPoint - followPoints [followPoints.Count - 1], 10.0F);
-			if(hit.collider != null){
-				if (hit.collider.tag == "no_walkable") {
-					Debug.Log("Way cancelled");
-					selectionState = SelectionState.Cancelled;
-					return;
-				}
-				
-				if (hit.collider.tag == "targetZone") {
-					Debug.Log("target assigned");
-					if(hit.collider.gameObject.GetComponent<TargetZone>().type == _Data.userType){
-						selectionState = SelectionState.Completed;
-					}
-					else{
-						selectionState = SelectionState.WrongCompleted;
-					}
-					
-					return;
-				}
-			}
-		}
-
 
 	}
 
@@ -256,18 +308,31 @@ public class FestivalUserBehaviour : MonoBehaviour {
 			VectorLine.Destroy(ref myLine);
 		}
 
-		followPoints.Clear ();
 		myLine = new VectorLine("Line", followPoints, lineWidth,LineType.Continuous,Joins.Weld); // C#
-		myLine.SetColor (Color.blue);
+
+		if(_Data.userType == UserController.UserType.Azul)myLine.SetColor (Color.blue);
+		if(_Data.userType == UserController.UserType.Amarillo)myLine.SetColor (Color.yellow);
+		if(_Data.userType == UserController.UserType.Green)myLine.SetColor (Color.green);
+		if(_Data.userType == UserController.UserType.Rojo)myLine.SetColor (Color.red);
+
 	}
 
 	public void UpdateLine(){
 		if (myLine != null) {
 			myLine.drawStart = currentPoint;
-			//myLine = new VectorLine("Line", followPoints, 2.0f,LineType.Continuous,Joins.Weld); // C#
-			myLine.MakeSpline (followPoints.ToArray (), followPoints.Count);
 
-			myLine.Draw ();
+			//Si el waypoint actual no es el final...
+			if(followPoints.Count > 0){
+				//myLine = new VectorLine("Line", followPoints, 2.0f,LineType.Continuous,Joins.Weld); // C#
+				myLine.MakeSpline (followPoints.ToArray (), followPoints.Count);
+
+				if(_Data.userType == UserController.UserType.Azul)myLine.SetColor (Color.blue);
+				if(_Data.userType == UserController.UserType.Amarillo)myLine.SetColor (Color.yellow);
+				if(_Data.userType == UserController.UserType.Green)myLine.SetColor (Color.green);
+				if(_Data.userType == UserController.UserType.Rojo)myLine.SetColor (Color.red);
+
+				myLine.Draw ();
+			}
 		}
 			
 	}
@@ -278,6 +343,10 @@ public class FestivalUserBehaviour : MonoBehaviour {
 				mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.crash_anim, false);
 				StopCoroutine("FollowBehaviour");
 				mState = FestivalUserState.Crashed;
+				ClientManager.instance.photonView.RPC("PlayerLost",GetComponent<PlayerClient>().photonPlayer);
+
+				//TODO El jugador se ha chocado.. avisar etc
+				GameController.instance.OnLostGame();
 			}
 		}
 
@@ -293,11 +362,16 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	}
 
 	public void OnStop(){
+		mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.idle_anim, true);
+
 		controlState = UserControlState.Stopped;
+
 	}
 
 	public void OnContinue(){
 		controlState = UserControlState.Continue;
+		mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.walk_anim, true);
+
 	}
 
 

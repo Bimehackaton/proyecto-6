@@ -6,12 +6,15 @@ public class ScoreManager : MonoBehaviour {
 	public static ScoreManager instance;
 
 	public UILabel scoreLabel;
+	public UILabel scoreFinalLabel;
+
 	public int currentScore;
 
 	// Use this for initialization
 	void Awake () {
 		instance = this;
 		currentScore = 0;
+		UpdateScoreLabel ();
 	}
 
 	public void OnStartGame(){
@@ -32,5 +35,8 @@ public class ScoreManager : MonoBehaviour {
 	public void OnUserFinishedWrong(){
 		currentScore--;
 		UpdateScoreLabel ();
+	}
+	public void UpdateFinalScore(){
+		scoreFinalLabel.text = currentScore.ToString ();
 	}
 }

@@ -45,6 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\DetectCollision.cs" />
      <Compile Include="Assets\Examples\Scripts\BasicPlatformerController.cs" />
      <Compile Include="Assets\Examples\Scripts\Chimera.cs" />
      <Compile Include="Assets\Examples\Scripts\ConstrainedCamera.cs" />
@@ -241,6 +242,7 @@
      <Compile Include="Assets\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewRotationModel.cs" />
      <Compile Include="Assets\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewScaleControl.cs" />
      <Compile Include="Assets\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewScaleModel.cs" />
+     <Compile Include="Assets\RoomSpaceController.cs" />
      <Compile Include="Assets\spine-csharp\Animation.cs" />
      <Compile Include="Assets\spine-csharp\AnimationState.cs" />
      <Compile Include="Assets\spine-csharp\AnimationStateData.cs" />
@@ -372,11 +374,11 @@
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
- <Reference Include="Vectrosity">
- <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/Vectrosity/Vectrosity.dll</HintPath>
- </Reference>
  <Reference Include="Photon3Unity3D">
  <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/Photon3Unity3D.dll</HintPath>
+ </Reference>
+ <Reference Include="Vectrosity">
+ <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/Vectrosity/Vectrosity.dll</HintPath>
  </Reference>
  <Reference Include="websocket-sharp">
  <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/WebSocket/websocket-sharp.dll</HintPath>

@@ -246,6 +246,21 @@
  <Reference Include="UnityEditor.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll</HintPath>
  </Reference>
+ <Reference Include="Newtonsoft.Json">
+ <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Photon Unity Networking/Editor/PhotonNetwork/Newtonsoft.Json.dll</HintPath>
+ </Reference>
+ <Reference Include="Photon3Unity3D">
+ <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/Photon3Unity3D.dll</HintPath>
+ </Reference>
+ <Reference Include="Vectrosity">
+ <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/Vectrosity/Vectrosity.dll</HintPath>
+ </Reference>
+ <Reference Include="VectrosityEditor">
+ <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/Vectrosity/Editor/VectrosityEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="websocket-sharp">
+ <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/WebSocket/websocket-sharp.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.Graphs.dll</HintPath>
  </Reference>
@@ -272,21 +287,6 @@
  </Reference>
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
- </Reference>
- <Reference Include="VectrosityEditor">
- <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/Vectrosity/Editor/VectrosityEditor.dll</HintPath>
- </Reference>
- <Reference Include="Vectrosity">
- <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/Vectrosity/Vectrosity.dll</HintPath>
- </Reference>
- <Reference Include="Newtonsoft.Json">
- <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Photon Unity Networking/Editor/PhotonNetwork/Newtonsoft.Json.dll</HintPath>
- </Reference>
- <Reference Include="Photon3Unity3D">
- <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/Photon3Unity3D.dll</HintPath>
- </Reference>
- <Reference Include="websocket-sharp">
- <HintPath>/Users/ionocasar/Documents/Unity Projects/Keplerians/Bime2015/proyecto-6/BimeProject/Assets/Plugins/WebSocket/websocket-sharp.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
