@@ -1,0 +1,321 @@
+{
+"skeleton": { "hash": "XpaOiGqFAziFjWU2o1i7+Zspq10", "spine": "2.1.27", "width": 10, "height": 20, "images": "./cb_images/" },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "persona", "bone": "root", "attachment": "bc_pop2" }
+],
+"skins": {
+	"default": {
+		"persona": {
+			"bc_blues1": { "width": 10, "height": 20 },
+			"bc_blues2": { "width": 10, "height": 20 },
+			"bc_borracho1": { "x": -1.01, "y": -0.41, "width": 14, "height": 11 },
+			"bc_borracho2": { "x": -1.91, "y": -0.47, "width": 12, "height": 11 },
+			"bc_borracho3": { "x": -1.97, "y": -0.41, "width": 12, "height": 11 },
+			"bc_dj1": { "width": 10, "height": 20 },
+			"bc_dj2": { "width": 10, "height": 20 },
+			"bc_dormilon_a": { "y": 1.55, "width": 8, "height": 17 },
+			"bc_dormilon_b": { "y": 1.13, "width": 8, "height": 18 },
+			"bc_dormilona_a": { "y": 1.49, "width": 8, "height": 17 },
+			"bc_dormilona_b": { "y": 1.07, "width": 8, "height": 18 },
+			"bc_heavy1": { "width": 10, "height": 20 },
+			"bc_heavy2": { "width": 10, "height": 20 },
+			"bc_heavy3": { "width": 10, "height": 20 },
+			"bc_p_a_a": { "y": 0.5, "width": 8, "height": 5 },
+			"bc_p_a_b": { "width": 8, "height": 6 },
+			"bc_p_a_c": { "width": 8, "height": 8 },
+			"bc_p_a_caer1": { "y": 0.98, "width": 14, "height": 8 },
+			"bc_p_a_caer2": { "y": -0.98, "width": 16, "height": 6 },
+			"bc_p_a_caer3": { "y": -2.94, "width": 16, "height": 8 },
+			"bc_p_a_caer4": { "y": -8.01, "width": 16, "height": 18 },
+			"bc_p_a_d": { "width": 8, "height": 6 },
+			"bc_p_a_e": { "width": 8, "height": 8 },
+			"bc_p_besos1": { "x": 1.01, "width": 10, "height": 8 },
+			"bc_p_besos2": { "x": 1.08, "width": 12, "height": 8 },
+			"bc_p_besos3": { "x": 1.07, "width": 12, "height": 8 },
+			"bc_p_r_a": { "y": 0.5, "width": 8, "height": 5 },
+			"bc_p_r_b": { "width": 8, "height": 6 },
+			"bc_p_r_c": { "width": 8, "height": 8 },
+			"bc_p_r_caer1": { "y": 1.03, "width": 14, "height": 8 },
+			"bc_p_r_caer2": { "y": -0.98, "width": 16, "height": 6 },
+			"bc_p_r_caer3": { "y": -2.94, "width": 16, "height": 8 },
+			"bc_p_r_caer4": { "y": -8.01, "width": 16, "height": 18 },
+			"bc_p_r_d": { "width": 8, "height": 6 },
+			"bc_p_r_e": { "width": 8, "height": 8 },
+			"bc_p_v_a": { "y": 0.5, "width": 8, "height": 5 },
+			"bc_p_v_b": { "width": 8, "height": 6 },
+			"bc_p_v_c": { "width": 8, "height": 8 },
+			"bc_p_v_caer1": { "y": 1.02, "width": 14, "height": 8 },
+			"bc_p_v_caer2": { "y": -0.96, "width": 16, "height": 6 },
+			"bc_p_v_caer3": { "y": -2.99, "width": 16, "height": 8 },
+			"bc_p_v_caer4": { "y": -7.99, "width": 16, "height": 18 },
+			"bc_p_v_d": { "width": 8, "height": 6 },
+			"bc_p_v_e": { "width": 8, "height": 8 },
+			"bc_p_z_a": { "y": 0.5, "width": 8, "height": 5 },
+			"bc_p_z_b": { "width": 8, "height": 6 },
+			"bc_p_z_c": { "width": 8, "height": 8 },
+			"bc_p_z_caer1": { "y": 1.03, "width": 14, "height": 8 },
+			"bc_p_z_caer2": { "y": -0.93, "width": 16, "height": 6 },
+			"bc_p_z_caer3": { "y": -2.94, "width": 16, "height": 8 },
+			"bc_p_z_caer4": { "y": -8.01, "width": 16, "height": 18 },
+			"bc_p_z_d": { "width": 8, "height": 6 },
+			"bc_p_z_e": { "width": 8, "height": 8 },
+			"bc_pop1": { "width": 10, "height": 20 },
+			"bc_pop2": { "width": 10, "height": 20 }
+		}
+	}
+},
+"animations": {
+	"amarillo_andar": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_a_a" },
+					{ "time": 0.1, "name": "bc_p_a_b" },
+					{ "time": 0.2, "name": "bc_p_a_c" },
+					{ "time": 0.3, "name": "bc_p_a_b" },
+					{ "time": 0.4, "name": "bc_p_a_a" },
+					{ "time": 0.5, "name": "bc_p_a_d" },
+					{ "time": 0.6, "name": "bc_p_a_e" },
+					{ "time": 0.7, "name": "bc_p_a_d" },
+					{ "time": 0.8, "name": "bc_p_a_a" }
+				]
+			}
+		}
+	},
+	"amarillo_choca": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_a_a" },
+					{ "time": 0.0666, "name": "bc_p_a_caer1" },
+					{ "time": 0.1333, "name": "bc_p_a_caer2" },
+					{ "time": 0.2, "name": "bc_p_a_caer3" },
+					{ "time": 0.2666, "name": "bc_p_a_caer4" }
+				]
+			}
+		}
+	},
+	"amarillo_quieto": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_a_a" }
+				]
+			}
+		}
+	},
+	"azul_andar": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_z_a" },
+					{ "time": 0.1, "name": "bc_p_z_b" },
+					{ "time": 0.2, "name": "bc_p_z_c" },
+					{ "time": 0.3, "name": "bc_p_z_b" },
+					{ "time": 0.4, "name": "bc_p_z_a" },
+					{ "time": 0.5, "name": "bc_p_z_d" },
+					{ "time": 0.6, "name": "bc_p_z_e" },
+					{ "time": 0.7, "name": "bc_p_z_d" },
+					{ "time": 0.8, "name": "bc_p_z_a" }
+				]
+			}
+		}
+	},
+	"azul_choca": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_z_a" },
+					{ "time": 0.0666, "name": "bc_p_z_caer1" },
+					{ "time": 0.1333, "name": "bc_p_z_caer2" },
+					{ "time": 0.2, "name": "bc_p_z_caer3" },
+					{ "time": 0.2666, "name": "bc_p_z_caer4" }
+				]
+			}
+		}
+	},
+	"azul_quieto": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_z_a" }
+				]
+			}
+		}
+	},
+	"besucones": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_besos1" },
+					{ "time": 1.1666, "name": "bc_p_besos2" },
+					{ "time": 1.3333, "name": "bc_p_besos3" },
+					{ "time": 2, "name": "bc_p_besos1" }
+				]
+			}
+		}
+	},
+	"blues": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_blues1" },
+					{ "time": 0.5, "name": "bc_blues2" },
+					{ "time": 1, "name": "bc_blues2" }
+				]
+			}
+		}
+	},
+	"borracho": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_borracho1" },
+					{ "time": 1.1666, "name": "bc_borracho2" },
+					{ "time": 1.3333, "name": "bc_borracho3" },
+					{ "time": 2.3333, "name": "bc_borracho2" },
+					{ "time": 2.5, "name": "bc_borracho1" }
+				]
+			}
+		}
+	},
+	"dormilon": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_dormilon_a" },
+					{ "time": 1.1666, "name": "bc_dormilon_b" },
+					{ "time": 1.5, "name": "bc_dormilon_a" }
+				]
+			}
+		}
+	},
+	"dormilona": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_dormilona_a" },
+					{ "time": 1.1666, "name": "bc_dormilona_b" },
+					{ "time": 1.5, "name": "bc_dormilona_a" }
+				]
+			}
+		}
+	},
+	"electro": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_dj1" },
+					{ "time": 0.2333, "name": "bc_dj2" },
+					{ "time": 0.4666, "name": "bc_dj2" }
+				]
+			}
+		}
+	},
+	"heavy": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_heavy1" },
+					{ "time": 0.1666, "name": "bc_heavy2" },
+					{ "time": 0.3333, "name": "bc_heavy3" },
+					{ "time": 0.5, "name": "bc_heavy2" },
+					{ "time": 0.6666, "name": "bc_heavy1" }
+				]
+			}
+		}
+	},
+	"pop": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_pop1" },
+					{ "time": 0.3333, "name": "bc_pop2" },
+					{ "time": 0.6666, "name": "bc_pop2" }
+				]
+			}
+		}
+	},
+	"rojo_andar": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_r_a" },
+					{ "time": 0.1, "name": "bc_p_r_b" },
+					{ "time": 0.2, "name": "bc_p_r_c" },
+					{ "time": 0.3, "name": "bc_p_r_b" },
+					{ "time": 0.4, "name": "bc_p_r_a" },
+					{ "time": 0.5, "name": "bc_p_r_d" },
+					{ "time": 0.6, "name": "bc_p_r_e" },
+					{ "time": 0.7, "name": "bc_p_r_d" },
+					{ "time": 0.8, "name": "bc_p_r_a" }
+				]
+			}
+		}
+	},
+	"rojo_choca": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_r_a" },
+					{ "time": 0.0666, "name": "bc_p_r_caer1" },
+					{ "time": 0.1333, "name": "bc_p_r_caer2" },
+					{ "time": 0.2, "name": "bc_p_r_caer3" },
+					{ "time": 0.2666, "name": "bc_p_r_caer4" }
+				]
+			}
+		}
+	},
+	"rojo_quieto": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_r_a" }
+				]
+			}
+		}
+	},
+	"verde_andar": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_v_a" },
+					{ "time": 0.1, "name": "bc_p_v_b" },
+					{ "time": 0.2, "name": "bc_p_v_c" },
+					{ "time": 0.3, "name": "bc_p_v_b" },
+					{ "time": 0.4, "name": "bc_p_v_a" },
+					{ "time": 0.5, "name": "bc_p_v_d" },
+					{ "time": 0.6, "name": "bc_p_v_e" },
+					{ "time": 0.7, "name": "bc_p_v_d" },
+					{ "time": 0.8, "name": "bc_p_v_a" }
+				]
+			}
+		}
+	},
+	"verde_choca": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_v_a" },
+					{ "time": 0.0666, "name": "bc_p_v_caer1" },
+					{ "time": 0.1333, "name": "bc_p_v_caer2" },
+					{ "time": 0.2, "name": "bc_p_v_caer3" },
+					{ "time": 0.2666, "name": "bc_p_v_caer4" }
+				]
+			}
+		}
+	},
+	"verde_quieto": {
+		"slots": {
+			"persona": {
+				"attachment": [
+					{ "time": 0, "name": "bc_p_v_a" }
+				]
+			}
+		}
+	}
+}
+}
