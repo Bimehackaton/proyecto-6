@@ -20,12 +20,17 @@ public class ScoreManager : MonoBehaviour {
 	}
 
 	public void UpdateScoreLabel(){
+		currentScore = Mathf.RoundToInt(Mathf.Clamp (currentScore, 0, Mathf.Infinity));
 		scoreLabel.text = currentScore.ToString ();
 
 	}
 
 	public void OnUserFinished(){
 		currentScore++;
+		UpdateScoreLabel ();
+	}
+	public void OnUserFinishedWrong(){
+		currentScore--;
 		UpdateScoreLabel ();
 	}
 }

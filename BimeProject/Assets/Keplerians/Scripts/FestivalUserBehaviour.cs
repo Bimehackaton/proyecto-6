@@ -14,7 +14,7 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	public enum FestivalUserState{FollowingPoints,FollowingDirection,Crashed,Finished};
 	public FestivalUserState mState;
 
-	public enum SelectionState{Pressed,Dragging,Released,Cancelled,Completed};
+	public enum SelectionState{Pressed,Dragging,Released,Cancelled,Completed,WrongCompleted};
 	public SelectionState selectionState;
 
 	public enum UserControlState{Stopped,Continue};
@@ -92,6 +92,15 @@ public class FestivalUserBehaviour : MonoBehaviour {
 								ScoreManager.instance.OnUserFinished();
 								yield break;
 							}
+							else if(selectionState == SelectionState.WrongCompleted){
+								Debug.Log("Ha finalizado incorrectamente");
+								mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.crash_anim, true);
+								//TODO El usuario se colocará en un sitio libre? Desconectar al usuario...
+								mState = FestivalUserState.Finished;
+								
+								ScoreManager.instance.OnUserFinishedWrong();
+								yield break;
+							}
 							Debug.Log("Ha llegado al final del camino, continuar con la misma direccion... current point is " + currentPoint.ToString());
 							mState = FestivalUserState.FollowingDirection;
 
@@ -123,8 +132,6 @@ public class FestivalUserBehaviour : MonoBehaviour {
 		}
 
 	}
-	float pressTime;
-	float minStartDragTime = 1.0F;
 
 	public void OnPress(bool pressed){
 
@@ -137,7 +144,6 @@ public class FestivalUserBehaviour : MonoBehaviour {
 		} 
 		else {
 			selectionState = SelectionState.Pressed;
-			pressTime = Time.time;
 			newWayStarted = false;
 		}
 	}
@@ -167,22 +173,6 @@ public class FestivalUserBehaviour : MonoBehaviour {
 		Vector3 worldPoint = UICamera.lastWorldPosition;
 		worldPoint.z = transform.position.z;
 
-		if (newWayStarted) {
-			RaycastHit2D hit = Physics2D.Raycast (followPoints [followPoints.Count - 1],
-			                                      (Vector2)worldPoint - followPoints [followPoints.Count - 1], 10.0F);
-	
-			if (hit.collider.tag == "no_walkable") {
-				Debug.Log("Way cancelled");
-				selectionState = SelectionState.Cancelled;
-				return;
-			}
-
-			if (hit.collider.tag == "targetZone") {
-				Debug.Log("target assigned");
-				selectionState = SelectionState.Completed;
-				return;
-			}
-		}
 
 		if (Vector2.Distance ((Vector2)worldPoint, !newWayStarted?(Vector2)transform.position:followPoints[followPoints.Count - 1]) > minWaypointDistance) {
 
@@ -218,10 +208,30 @@ public class FestivalUserBehaviour : MonoBehaviour {
 			addPoint.z = transform.position.z;
 			
 			followPoints.Add(addPoint);
-			pressTime = Time.time;
 
+		}
 
-
+		if (newWayStarted) {
+			RaycastHit2D hit = Physics2D.Raycast (followPoints [followPoints.Count - 1],
+			                                      (Vector2)worldPoint - followPoints [followPoints.Count - 1], 10.0F);
+			
+			if (hit.collider.tag == "no_walkable") {
+				Debug.Log("Way cancelled");
+				selectionState = SelectionState.Cancelled;
+				return;
+			}
+			
+			if (hit.collider.tag == "targetZone") {
+				Debug.Log("target assigned");
+				if(hit.collider.gameObject.GetComponent<TargetZone>().type == _Data.userType){
+					selectionState = SelectionState.Completed;
+				}
+				else{
+					selectionState = SelectionState.WrongCompleted;
+				}
+				
+				return;
+			}
 		}
 
 
@@ -238,6 +248,7 @@ public class FestivalUserBehaviour : MonoBehaviour {
 	//Line methods
 	public void InitLine(){
 		myLine = new VectorLine("Line", followPoints, lineWidth,LineType.Continuous,Joins.Weld); // C#
+		myLine.SetColor (Color.blue);
 	}
 
 	public void UpdateLine(){

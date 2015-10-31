@@ -33,12 +33,14 @@ public class ClientManager : Photon.MonoBehaviour {
 
 	public void OnClickStop(){
 		photonView.RPC ("ReceiveStop", PhotonTargets.All, PhotonNetwork.playerName);
-
+		NGUITools.SetActive(stopButton,false);
+		NGUITools.SetActive(continueButton,true);
 	}
 
 	public void OnCLickCOntinue(){
 		photonView.RPC ("ReceiveContinue", PhotonTargets.All, PhotonNetwork.playerName);
-
+		NGUITools.SetActive(stopButton,true);
+		NGUITools.SetActive(continueButton,false);
 	}
 
 	[PunRPC]public void ReceiveStop(string playerName){
