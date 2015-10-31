@@ -66,9 +66,11 @@
      <Compile Include="Assets\Keplerians\Scripts\FollowPlayer.cs" />
      <Compile Include="Assets\Keplerians\Scripts\GameController.cs" />
      <Compile Include="Assets\Keplerians\Scripts\HUDController.cs" />
+     <Compile Include="Assets\Keplerians\Scripts\MessageScript.cs" />
      <Compile Include="Assets\Keplerians\Scripts\SceneLoader.cs" />
+     <Compile Include="Assets\Keplerians\Scripts\ScoreManager.cs" />
+     <Compile Include="Assets\Keplerians\Scripts\TargetZone.cs" />
      <Compile Include="Assets\Keplerians\Scripts\UserController.cs" />
-     <Compile Include="Assets\MessageScript.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\UICursor.cs" />
@@ -239,7 +241,6 @@
      <Compile Include="Assets\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewRotationModel.cs" />
      <Compile Include="Assets\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewScaleControl.cs" />
      <Compile Include="Assets\Photon Unity Networking\Plugins\PhotonNetwork\Views\PhotonTransformViewScaleModel.cs" />
-     <Compile Include="Assets\TargetZone.cs" />
      <Compile Include="Assets\spine-csharp\Animation.cs" />
      <Compile Include="Assets\spine-csharp\AnimationState.cs" />
      <Compile Include="Assets\spine-csharp\AnimationStateData.cs" />

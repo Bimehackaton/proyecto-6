@@ -88,6 +88,8 @@ public class FestivalUserBehaviour : MonoBehaviour {
 								mSkeletonAnimation.state.SetAnimation (0,_Data.animInfo.idle_anim, true);
 								//TODO El usuario se colocará en un sitio libre? Desconectar al usuario...
 								mState = FestivalUserState.Finished;
+
+								ScoreManager.instance.OnUserFinished();
 								yield break;
 							}
 							Debug.Log("Ha llegado al final del camino, continuar con la misma direccion... current point is " + currentPoint.ToString());
