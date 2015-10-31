@@ -105,7 +105,10 @@ public class FestivalUserBehaviour : MonoBehaviour {
 							mState = FestivalUserState.FollowingDirection;
 
 							followPoints.Clear();
-							VectorLine.Destroy(ref myLine);
+
+							if(myLine != null){
+								VectorLine.Destroy(ref myLine);
+							}
 						}
 					}
 				}
@@ -157,32 +160,31 @@ public class FestivalUserBehaviour : MonoBehaviour {
 			selectionState = SelectionState.Dragging;
 
 			if(myLine!=null){
+				followPoints.Clear();
 				VectorLine.Destroy(ref myLine);
 			}
 		}
 
-
-		//El tiempo que se puede tardar en añadir otro punto.. sino se cancela el camino?
-//		if (Time.time - pressTime > minStartDragTime) {
-//			//Cancelar el camino..
-//			mState = FestivalUserState.FollowingDirection;
-//			selectionState = SelectionState.Cancelled;
-//			Debug.Log("Drawing cancelled");
-//		}
-
 		Vector3 worldPoint = UICamera.lastWorldPosition;
 		worldPoint.z = transform.position.z;
+		Vector2 nextPoint = Vector2.zero;
+
+		if (!newWayStarted || (newWayStarted && mState == FestivalUserState.FollowingDirection)) {
+			nextPoint = transform.position;
+		} 
+		else if (newWayStarted && mState == FestivalUserState.FollowingPoints) {
+			nextPoint = followPoints [followPoints.Count - 1];
+		} 
 
 
-		if (Vector2.Distance ((Vector2)worldPoint, !newWayStarted?(Vector2)transform.position:followPoints[followPoints.Count - 1]) > minWaypointDistance) {
+		if (Vector2.Distance ((Vector2)worldPoint, nextPoint) > minWaypointDistance) {
+			bool initLine = false;
 
 			if(!newWayStarted){
-				followPoints.Clear();
-				followPoints.Add(transform.position);
+				initLine = true;
 				newWayStarted = true;
 				currentPoint = 0;
-
-				InitLine();
+				followPoints.Add(transform.position);
 
 				if(mState == FestivalUserState.FollowingDirection){
 					mState = FestivalUserState.FollowingPoints;
@@ -193,10 +195,8 @@ public class FestivalUserBehaviour : MonoBehaviour {
 
 			}
 
-
-			if(mState == FestivalUserState.FollowingDirection){
+			if(newWayStarted && mState == FestivalUserState.FollowingDirection){
 				if(followPoints.Count == 0){
-					InitLine();
 					mState = FestivalUserState.FollowingPoints;
 					followPoints.Add(transform.position);
 					currentPoint = 0;
@@ -206,31 +206,35 @@ public class FestivalUserBehaviour : MonoBehaviour {
 			//Add new point
 			Vector3 addPoint = UICamera.lastWorldPosition;
 			addPoint.z = transform.position.z;
-			
+
 			followPoints.Add(addPoint);
 
+			if(initLine){
+				InitLine();
+			}
 		}
 
-		if (newWayStarted) {
+		if (newWayStarted && followPoints.Count > 0) {
 			RaycastHit2D hit = Physics2D.Raycast (followPoints [followPoints.Count - 1],
 			                                      (Vector2)worldPoint - followPoints [followPoints.Count - 1], 10.0F);
-			
-			if (hit.collider.tag == "no_walkable") {
-				Debug.Log("Way cancelled");
-				selectionState = SelectionState.Cancelled;
-				return;
-			}
-			
-			if (hit.collider.tag == "targetZone") {
-				Debug.Log("target assigned");
-				if(hit.collider.gameObject.GetComponent<TargetZone>().type == _Data.userType){
-					selectionState = SelectionState.Completed;
-				}
-				else{
-					selectionState = SelectionState.WrongCompleted;
+			if(hit.collider != null){
+				if (hit.collider.tag == "no_walkable") {
+					Debug.Log("Way cancelled");
+					selectionState = SelectionState.Cancelled;
+					return;
 				}
 				
-				return;
+				if (hit.collider.tag == "targetZone") {
+					Debug.Log("target assigned");
+					if(hit.collider.gameObject.GetComponent<TargetZone>().type == _Data.userType){
+						selectionState = SelectionState.Completed;
+					}
+					else{
+						selectionState = SelectionState.WrongCompleted;
+					}
+					
+					return;
+				}
 			}
 		}
 
@@ -247,15 +251,21 @@ public class FestivalUserBehaviour : MonoBehaviour {
 
 	//Line methods
 	public void InitLine(){
+
+		if (myLine != null) {
+			VectorLine.Destroy(ref myLine);
+		}
+
+		followPoints.Clear ();
 		myLine = new VectorLine("Line", followPoints, lineWidth,LineType.Continuous,Joins.Weld); // C#
 		myLine.SetColor (Color.blue);
 	}
 
 	public void UpdateLine(){
 		if (myLine != null) {
-				myLine.drawStart = currentPoint;
-				//myLine = new VectorLine("Line", followPoints, 2.0f,LineType.Continuous,Joins.Weld); // C#
-				myLine.MakeSpline (followPoints.ToArray (), followPoints.Count);
+			myLine.drawStart = currentPoint;
+			//myLine = new VectorLine("Line", followPoints, 2.0f,LineType.Continuous,Joins.Weld); // C#
+			myLine.MakeSpline (followPoints.ToArray (), followPoints.Count);
 
 			myLine.Draw ();
 		}
